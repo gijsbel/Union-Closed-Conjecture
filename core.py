@@ -10,20 +10,22 @@ def printFamily(family):
     print([list(m) for m in family])
 
 # checks if a family is union closed
-def isUnionClosed(family):
+def isUnionClosed(family, output=False):
     for m in family:
         for n in family:
             if m.union(n) not in family:
-                #print("The union of "+str(list(m))+" and "+str(list(n))+" is not in the family")
+                if output:
+                    print("The union of "+str(list(m))+" and "+str(list(n))+" is not in the family")
                 return False
     return True
 
 # checks if a family is intersection closed
-def isIntersectionClosed(family):
+def isIntersectionClosed(family, output=False):
     for m in family:
         for n in family:
             if m.intersection(n) not in family:
-                #print("The intersection of "+str(list(m))+" and "+str(list(n))+" is not in the family")
+                if output:
+                    print("The intersection of "+str(list(m))+" and "+str(list(n))+" is not in the family")
                 return False
     return True
 
@@ -59,13 +61,14 @@ def getGroundPlane(family):
     return a
 
 # finds the most common elements in the family
-def mostCommon(family):
+def mostCommon(family, output=False):
     a = getGroundPlane(family);
     m = set()
     n = 0
     for e in a:
         k = numberOfAppearances(family,e)
-        #print(str(e)+" appears "+str(k)+" times")
+        if output:
+            print(str(e)+" appears "+str(k)+" times")
         if k==n:
             m.add(e)
         if k>n:
@@ -75,13 +78,14 @@ def mostCommon(family):
     return m
 
 # finds the least common elements in the family
-def leastCommon(family):
+def leastCommon(family, output=False):
     a = getGroundPlane(family);
     m = set()
     n = 10000000000
     for e in a:
         k = numberOfAppearances(family,e)
-        #print(str(e)+" appears "+str(k)+" times")
+        if output:
+            print(str(e)+" appears "+str(k)+" times")
         if k==n:
             m.add(e)
         if k<n:
@@ -140,9 +144,14 @@ def minimalElements(family):
             minElements.add(e)
     return minElements
 
+# given an universe, returns the complement of the set
 def complementSet(aset, universe):
     return universe.difference(aset)
 
+# given a family, returns the complement family by
+# taking the complement of every member
+# if no universe is specified, it is assumed to be 
+# the ground plane of the family
 def complementFamily(family, universe=None):
     cfam = set()
     if not universe:
@@ -151,6 +160,14 @@ def complementFamily(family, universe=None):
     for m in family:
         cfam.add(frozenset(complementSet(m,universe)))
     return cfam
+
+# given a family, returns the supercomplement
+def superComplementFamily(family, universe=None):
+    cfam = set()
+    if not universe:
+        #print("No universe given; using powerset of ground plane")
+        universe = powerset(getGroundPlane(family))
+    return universe.difference(family)
 
 #chooses k random subsets from the set {1, ..., n}
 #every subset has the same probability of being chosen

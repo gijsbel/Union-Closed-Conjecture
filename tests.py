@@ -82,19 +82,17 @@ print(c/(2**(2**n)))
 """
 
 
-F = [[1,2],[1],[3],[4,3],[4]]
-F = familyFromList(F)
-F = makeUnionClosed(F)
-printFamily(F)
-print(len(F))
-print(isUnionClosed(F))
-print(hasCommon(F))
-print(numberOfAppearances(F, 1))
-
-U = getGroundPlane(F)
-CF = complementFamily(F)
-printFamily(CF)
-print(len(CF))
-print(isIntersectionClosed(CF))
-print(hasRare(CF))
-print(numberOfAppearances(CF, 1))
+n = 3
+U = frozenset(range(1,n+1))
+PU = powerset(U)
+PPU = powerset(PU)
+print("Their are ",len(PU)," members in total")
+print("Their are ",len(PPU)," families in total")
+for f in PPU:
+    if isUnionClosed(f):
+        if isIntersectionClosed(f):
+            scf = superComplementFamily(f, PU)
+            if not isIntersectionClosed(scf):
+                if not isUnionClosed(scf):
+                    printFamily(f)
+                    printFamily(scf)
