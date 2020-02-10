@@ -140,13 +140,16 @@ def minimalElements(family):
             minElements.add(e)
     return minElements
 
-def complementSet(universe, aset):
+def complementSet(aset, universe):
     return universe.difference(aset)
 
-def complementFamily(universe, family):
+def complementFamily(family, universe=None):
     cfam = set()
+    if not universe:
+        #print("No universe given; using ground plane")
+        universe = getGroundPlane(family)
     for m in family:
-        cfam.add(frozenset(complementSet(universe,m)))
+        cfam.add(frozenset(complementSet(m,universe)))
     return cfam
 
 #chooses k random subsets from the set {1, ..., n}
