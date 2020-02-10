@@ -44,6 +44,7 @@ for k in range(1,2**n+1):
 
 
 #all kinds of bullshit
+"""
 n = 4
 P = powerset(powerset(range(1,n+1)))
 c = 0
@@ -78,5 +79,18 @@ for f in P:
         if unionClos:
             print("THIS IS VERY WRONG")
 print(c/(2**(2**n)))
+"""
 
-    
+
+F = [[1,2],[1],[3],[4,3],[4]]
+F = familyFromList(F)
+F = makeUnionClosed(F)
+printFamily(F)
+print(isUnionClosed(F))
+print(hasCommon(F))
+
+U = getGroundPlane(F)
+CF = complementFamily(U,F)
+printFamily(CF)
+print(isIntersectionClosed(CF))
+print(hasRare(CF))

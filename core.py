@@ -18,12 +18,29 @@ def isUnionClosed(family):
                 return False
     return True
 
+# checks if a family is intersection closed
+def isIntersectionClosed(family):
+    for m in family:
+        for n in family:
+            if m.intersection(n) not in family:
+                #print("The intersection of "+str(list(m))+" and "+str(list(n))+" is not in the family")
+                return False
+    return True
+
 # make a family union-closed
 def makeUnionClosed(family):
     c = family.copy()
     for m in family:
         for n in family:
             c.add(m.union(n))
+    return c
+
+# make a family intersection-closed
+def makeIntersectionClosed(family):
+    c = family.copy()
+    for m in family:
+        for n in family:
+            c.add(m.intersection(n))
     return c
 
 # finds how many members of the family contain a certain element
@@ -57,6 +74,22 @@ def mostCommon(family):
             m.add(e)
     return m
 
+# finds the least common elements in the family
+def leastCommon(family):
+    a = getGroundPlane(family);
+    m = set()
+    n = 10000000000
+    for e in a:
+        k = numberOfAppearances(family,e)
+        #print(str(e)+" appears "+str(k)+" times")
+        if k==n:
+            m.add(e)
+        if k<n:
+            n = k
+            m = set()
+            m.add(e)
+    return m
+
 # checks if the most apparant element is in at least
 # half of the members of the members of the family
 def hasCommon(family):
@@ -64,6 +97,14 @@ def hasCommon(family):
     if(len(e)==0):
         return False
     return numberOfAppearances(family,e.pop())>=len(family)/2
+
+# checks if the least apparant element is in at most
+# half of the members of the members of the family
+def hasRare(family):
+    e = leastCommon(family)
+    if(len(e)==0):
+        return False
+    return numberOfAppearances(family,e.pop())<=len(family)/2
 
 
 # https://stackoverflow.com/questions/1482308/how-to-get-all-subsets-of-a-set-powerset
@@ -98,6 +139,15 @@ def minimalElements(family):
         for e in m:
             minElements.add(e)
     return minElements
+
+def complementSet(universe, aset):
+    return universe.difference(aset)
+
+def complementFamily(universe, family):
+    cfam = set()
+    for m in family:
+        cfam.add(frozenset(complementSet(universe,m)))
+    return cfam
 
 #chooses k random subsets from the set {1, ..., n}
 #every subset has the same probability of being chosen
