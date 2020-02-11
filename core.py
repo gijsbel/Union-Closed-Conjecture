@@ -1,6 +1,7 @@
 from itertools import chain, combinations
 from random import sample
 import math
+import warnings
 
 def familyFromList(L):
     return set(frozenset(i) for i in L)
@@ -90,13 +91,13 @@ def mostOccuring(family, output=False):
             n = k
             m = set()
             m.add(e)
-    return m
+    return m, n
 
 # finds the least common elements in the family
 def leastOccuring(family, output=False):
     a = getGroundPlane(family);
     m = set()
-    n = 10000000000
+    n = math.inf
     for e in a:
         k = numberOfAppearances(family,e)
         if output:
@@ -107,27 +108,26 @@ def leastOccuring(family, output=False):
             n = k
             m = set()
             m.add(e)
-    return m
+    return m, n
 
 # checks if the most apparant element is in at least
 # half of the members of the members of the family
 def hasCommon(family):
-    e = mostOccuring(family)
-    if(len(e)==0):
-        return False
-    return numberOfAppearances(family,e.pop())>=len(family)/2
+    e, n = mostOccuring(family)
+    return n>=len(family)/2
 
 # checks if the least apparant element is in at most
 # half of the members of the members of the family
 def hasRare(family):
-    e = leastOccuring(family)
-    if(len(e)==0):
-        return False
-    return numberOfAppearances(family,e.pop())<=len(family)/2
+    e, n = leastOccuring(family)
+    return n<=len(family)/2
 
 
 # https://stackoverflow.com/questions/1482308/how-to-get-all-subsets-of-a-set-powerset
 def powerset(aset):
+    if len(aset)>=30:
+        warnings.warn("The powerset of a set with cardinality>30 will create at least 1 bilion sets.")
+        
     s = list(aset)
     p = set()
     for r in range(len(s)+1):
@@ -193,16 +193,32 @@ def randomFamily(n,k):
 
 #
 def inspectFamily(F):
+    k = len(F)
+    gp = getGroundPlane(F)
+    uc = isUnionClosed(F)
+    ic = isIntersectionClosed(F)
+    mm = minimalMembers(F)
+    me = minimalElements(F)
+    mo, mon = mostOccuring(F)
+    lo, lon = leastOccuring(F)
+    hc = mon >= k/2
+    hr = lon <= k/2
     print("Family:")
     printFamily(F)
-    print("Number of members:", len(F))
-    print("Ground Plane:",getGroundPlane(F))
-    print("Union Closed:", isUnionClosed(F, output=True))
-    print("Intersection Closed:", isIntersectionClosed(F, output=True))
+    print("Number of members:", k)
+    print("Ground Plane:",gp)
+    print("Union Closed:", uc)
+    print("Intersection Closed:", ic)
     print("Minimal Members:")
-    printFamily(minimalMembers(F))
-    print("Minimal Elements:", minimalElements(F))
-    print("Most Occuring:", mostOccuring(F, output=True))
-    print("Least :", leastOccuring(F))
-    print("Has Common?:", hasCommon(F))
-    print("Has Rare?:", hasRare(F))
+    printFamily(mm)
+    print("Minimal Elements:", me)
+    print("Most Occuring:", mo, mon)
+    print("Least Occuring:", lo, lon)
+    print("Has Common?:", hc)
+    print("Has Rare?:", hr)
+
+    if uc and (not hc):
+        raise Exception("COUNTER EXAMPLE TO FRANKS CONJECTURE")
+
+    if len(me.intersection(mo))==0:
+        raise Exception("COUNTER EXAMPLE TO SANDER&GIJS CONJECTURE")

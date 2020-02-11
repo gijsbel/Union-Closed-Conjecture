@@ -131,17 +131,20 @@ inspectFamily(F)
 """
 
 
-n = 5
+n = 10
 print("making powerset of universe...")
 P = powerset(range(1,n+1))
+print("power set has cardinality ",len(P))
 print("done")
 for i in range(10000):
     print(i)
-    k = randint(3, 2**n)
+    k = randint(3, len(P)/2)
     f = set(sample(P,k))
     f = makeUnionClosed(f)
-    mo = mostOccuring(f)
+    mo, o = mostOccuring(f)
     me = minimalElements(f)
+    inspectFamily(f)
     if len(mo.intersection(me))==0:
         print("omg!")
         inspectFamily(f)
+        break
