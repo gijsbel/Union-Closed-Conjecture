@@ -44,7 +44,10 @@ def makeUnionClosed(family):
     for m in family:
         for n in family:
             c.add(m.union(n))
-    return c
+    if isUnionClosed(c):
+        return c
+    else:
+        return makeUnionClosed(c)
 
 # make a family intersection-closed
 def makeIntersectionClosed(family):
@@ -52,7 +55,10 @@ def makeIntersectionClosed(family):
     for m in family:
         for n in family:
             c.add(m.intersection(n))
-    return c
+    if isIntersectionClosed(c):
+        return c
+    else:
+        return makeIntersectionClosed(c)
 
 # finds how many members of the family contain a certain element
 def numberOfAppearances(family, element):
@@ -197,6 +203,6 @@ def inspectFamily(F):
     printFamily(minimalMembers(F))
     print("Minimal Elements:", minimalElements(F))
     print("Most Occuring:", mostOccuring(F, output=True))
-    print("Least Occuring:", leastOccuring(F))
+    print("Least :", leastOccuring(F))
     print("Has Common?:", hasCommon(F))
     print("Has Rare?:", hasRare(F))

@@ -1,5 +1,6 @@
 from core import *
 
+from random import randint
 
 # family from list of lists
 """
@@ -128,3 +129,19 @@ F = F.union(mixFamilies(G3,H3))
 F = F.union(mixFamilies(R2,R3))
 inspectFamily(F)
 """
+
+
+n = 5
+print("making powerset of universe...")
+P = powerset(range(1,n+1))
+print("done")
+for i in range(10000):
+    print(i)
+    k = randint(3, 2**n)
+    f = set(sample(P,k))
+    f = makeUnionClosed(f)
+    mo = mostOccuring(f)
+    me = minimalElements(f)
+    if len(mo.intersection(me))==0:
+        print("omg!")
+        inspectFamily(f)
