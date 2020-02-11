@@ -135,7 +135,7 @@ def powerset(aset):
     return p
 
 # finds the minimal members
-# that is, the members that do contain properly contain another member
+# that is, the members that do properly contain another member
 # except for the empty set
 def minimalMembers(family):
     minimalset = set()
@@ -158,6 +158,32 @@ def minimalElements(family):
         for e in m:
             minElements.add(e)
     return minElements
+
+# finds the maximal members
+# that is, the members that are not properly contained in another member
+# except for the ground plane
+def maximalMembers(family):
+    maximalset = set()
+    k = len(getGroundPlane(family))
+    for m in family:
+        maximal = True
+        for n in family:
+            if len(n)<k and (not n is m):
+                if m.issubset(n):
+                    maximal = False
+                    break
+        if maximal:
+            maximalset.add(m)
+    return maximalset
+
+# union of the minimal members
+def maximalElements(family):
+    maxElements = set()
+    maxMembers = maximalMembers(family)
+    for m in maxMembers:
+        for e in m:
+            maxElements.add(e)
+    return maxElements
 
 # given an universe, returns the complement of the set
 def complementSet(aset, universe):
@@ -199,6 +225,8 @@ def inspectFamily(F):
     ic = isIntersectionClosed(F)
     mm = minimalMembers(F)
     me = minimalElements(F)
+    maxm = maximalMembers(F)
+    maxe = maximalElements(F)
     mo, mon = mostOccuring(F)
     lo, lon = leastOccuring(F)
     hc = mon >= k/2
@@ -212,6 +240,9 @@ def inspectFamily(F):
     print("Minimal Members:")
     printFamily(mm)
     print("Minimal Elements:", me)
+    print("Maximal Members:")
+    printFamily(maxm)
+    print("Maximal Elements:", maxe)
     print("Most Occuring:", mo, mon)
     print("Least Occuring:", lo, lon)
     print("Has Common?:", hc)
@@ -220,5 +251,8 @@ def inspectFamily(F):
     if uc and (not hc):
         raise Exception("COUNTER EXAMPLE TO FRANKS CONJECTURE")
 
-    if len(me.intersection(mo))==0:
+    if ic and (not hr):
+        raise Exception("COUNTER EXAMPLE TO FRANKS CONJECTURE")
+
+    if uc and len(me.intersection(mo))==0:
         raise Exception("COUNTER EXAMPLE TO SANDER&GIJS CONJECTURE")
