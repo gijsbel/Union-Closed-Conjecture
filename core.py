@@ -70,7 +70,7 @@ def getGroundPlane(family):
     return a
 
 # finds the most common elements in the family
-def mostCommon(family, output=False):
+def mostOccuring(family, output=False):
     a = getGroundPlane(family);
     m = set()
     n = 0
@@ -87,7 +87,7 @@ def mostCommon(family, output=False):
     return m
 
 # finds the least common elements in the family
-def leastCommon(family, output=False):
+def leastOccuring(family, output=False):
     a = getGroundPlane(family);
     m = set()
     n = 10000000000
@@ -106,7 +106,7 @@ def leastCommon(family, output=False):
 # checks if the most apparant element is in at least
 # half of the members of the members of the family
 def hasCommon(family):
-    e = mostCommon(family)
+    e = mostOccuring(family)
     if(len(e)==0):
         return False
     return numberOfAppearances(family,e.pop())>=len(family)/2
@@ -114,7 +114,7 @@ def hasCommon(family):
 # checks if the least apparant element is in at most
 # half of the members of the members of the family
 def hasRare(family):
-    e = leastCommon(family)
+    e = leastOccuring(family)
     if(len(e)==0):
         return False
     return numberOfAppearances(family,e.pop())<=len(family)/2
@@ -196,7 +196,7 @@ def inspectFamily(F):
     print("Minimal Members:")
     printFamily(minimalMembers(F))
     print("Minimal Elements:", minimalElements(F))
-    print("Most Common:", mostCommon(F, output=True))
-    print("Least Common:", leastCommon(F))
+    print("Most Occuring:", mostOccuring(F, output=True))
+    print("Least Occuring:", leastOccuring(F))
     print("Has Common?:", hasCommon(F))
     print("Has Rare?:", hasRare(F))

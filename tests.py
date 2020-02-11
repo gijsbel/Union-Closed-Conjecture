@@ -55,7 +55,7 @@ for f in P:
         continue
     
     minElements = minimalElements(f)
-    mostApp     = mostCommon(f)
+    mostApp     = mostOccuring(f)
     hasCom      = hasCommon(f)
     unionClos   = isUnionClosed(f)
 
