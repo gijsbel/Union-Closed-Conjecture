@@ -9,13 +9,21 @@ def familyFromList(L):
 def printFamily(family):
     print([list(m) for m in family])
 
+def mixFamilies(family1, family2):
+    newfam = set()
+    for m in family1:
+        for n in family2:
+            newfam.add(m.union(n))
+    return newfam
+
 # checks if a family is union closed
 def isUnionClosed(family, output=False):
     for m in family:
         for n in family:
-            if m.union(n) not in family:
+            u = m.union(n)
+            if u not in family:
                 if output:
-                    print("The union of "+str(list(m))+" and "+str(list(n))+" is not in the family")
+                    print("The union of "+str(list(m))+" and "+str(list(n))+"="+str(list(u)) +" is not in the family")
                 return False
     return True
 
@@ -23,9 +31,10 @@ def isUnionClosed(family, output=False):
 def isIntersectionClosed(family, output=False):
     for m in family:
         for n in family:
-            if m.intersection(n) not in family:
+            i = m.intersection(n)
+            if i not in family:
                 if output:
-                    print("The intersection of "+str(list(m))+" and "+str(list(n))+" is not in the family")
+                    print("The intersection of "+str(list(m))+" and "+str(list(n))+"="+str(list(i))+" is not in the family")
                 return False
     return True
 
@@ -174,3 +183,20 @@ def superComplementFamily(family, universe=None):
 def randomFamily(n,k):
     P = powerset(range(1,n+1))
     return set(sample(P,k))
+
+
+#
+def inspectFamily(F):
+    print("Family:")
+    printFamily(F)
+    print("Number of members:", len(F))
+    print("Ground Plane:",getGroundPlane(F))
+    print("Union Closed:", isUnionClosed(F, output=True))
+    print("Intersection Closed:", isIntersectionClosed(F, output=True))
+    print("Minimal Members:")
+    printFamily(minimalMembers(F))
+    print("Minimal Elements:", minimalElements(F))
+    print("Most Common:", mostCommon(F, output=True))
+    print("Least Common:", leastCommon(F))
+    print("Has Common?:", hasCommon(F))
+    print("Has Rare?:", hasRare(F))
