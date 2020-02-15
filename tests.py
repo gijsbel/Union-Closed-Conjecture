@@ -130,6 +130,8 @@ F = F.union(mixFamilies(R2,R3))
 inspectFamily(F)
 """
 
+
+"""
 n = 10
 print("making powerset of universe...")
 P = powerset(range(1,n+1))
@@ -141,3 +143,9 @@ for i in range(10000):
     f = set(sample(P,k))
     #f = makeUnionClosed(f)
     inspectFamily(f)
+"""
+
+
+F = [[1,2],[1],[3],[4,3],[4]]
+F = familyFromList(F)
+inspectFamily(F)

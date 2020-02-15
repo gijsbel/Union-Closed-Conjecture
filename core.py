@@ -6,6 +6,24 @@ import warnings
 def familyFromList(L):
     return set(frozenset(i) for i in L)
 
+#
+def membersAmount(family):
+    return len(family)
+
+def cumulativeMemberSize(family):
+    s = 0
+    for m in family:
+        s += len(m)
+    return s
+
+def averageOccurence(family):
+    return cumulativeMemberSize(family)/getGroundPlaneSize(family)
+
+def averagingCheck(family):
+    k = averageOccurence(family)
+    k = math.ceil(k)
+    return k >= membersAmount(family)/2
+
 # pretty prints a family
 def printFamily(family):
     print([list(m) for m in family])
@@ -75,6 +93,10 @@ def getGroundPlane(family):
     for m in family:
         a = a.union(m)
     return a
+
+
+def getGroundPlaneSize(family):
+    return len(getGroundPlane(family))
 
 # finds the most common elements in the family
 def mostOccuring(family, output=False):
@@ -219,7 +241,7 @@ def randomFamily(n,k):
 
 #
 def inspectFamily(F):
-    k = len(F)
+    k = membersAmount(F)
     gp = getGroundPlane(F)
     uc = isUnionClosed(F)
     ic = isIntersectionClosed(F)
@@ -235,6 +257,8 @@ def inspectFamily(F):
     printFamily(F)
     print("Number of members:", k)
     print("Ground Plane:",gp)
+    print("Ground Plane Size:",len(gp))
+    print("Average Occurence:",averageOccurence(F))
     print("Union Closed:", uc)
     print("Intersection Closed:", ic)
     print("Minimal Members:")
@@ -248,6 +272,7 @@ def inspectFamily(F):
     print("Has Common?:", hc)
     print("Has Rare?:", hr)
 
+    print("Averaging Check : ", averagingCheck(F))
     if uc and (not hc):
         raise Exception("COUNTER EXAMPLE TO FRANKS CONJECTURE")
 
