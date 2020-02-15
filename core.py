@@ -17,7 +17,10 @@ def cumulativeMemberSize(family):
     return s
 
 def averageOccurence(family):
-    return cumulativeMemberSize(family)/getGroundPlaneSize(family)
+    gps = getGroundPlaneSize(family)
+    if gps==0:
+        return 0
+    return cumulativeMemberSize(family)/gps
 
 def averagingCheck(family):
     k = averageOccurence(family)
@@ -240,9 +243,10 @@ def randomFamily(n,k):
 
 
 #
-def inspectFamily(F):
+def inspectFamily(F, everything=False):
     k = membersAmount(F)
     gp = getGroundPlane(F)
+    gpn = len(gp)
     uc = isUnionClosed(F)
     ic = isIntersectionClosed(F)
     mm = minimalMembers(F)
@@ -253,31 +257,41 @@ def inspectFamily(F):
     lo, lon = leastOccuring(F)
     hc = mon >= k/2
     hr = lon <= k/2
-    print("Family:")
-    printFamily(F)
-    print("Number of members:", k)
-    print("Ground Plane:",gp)
-    print("Ground Plane Size:",len(gp))
-    print("Average Occurence:",averageOccurence(F))
-    print("Union Closed:", uc)
-    print("Intersection Closed:", ic)
-    print("Minimal Members:")
-    printFamily(mm)
-    print("Minimal Elements:", me)
-    print("Maximal Members:")
-    printFamily(maxm)
-    print("Maximal Elements:", maxe)
-    print("Most Occuring:", mo, mon)
-    print("Least Occuring:", lo, lon)
-    print("Has Common?:", hc)
-    print("Has Rare?:", hr)
 
-    print("Averaging Check : ", averagingCheck(F))
+    if k<=1:
+        if everything:
+            print("Trivial Family")
+        return
+      
     if uc and (not hc):
-        raise Exception("COUNTER EXAMPLE TO FRANKS CONJECTURE")
+        everything=True
+        print("COUNTER EXAMPLE TO FRANKS CONJECTURE")
 
-    if ic and (not hr):
-        raise Exception("COUNTER EXAMPLE TO FRANKS CONJECTURE")
+    if ic and (not hr) :
+        everything=True
+        print("COUNTER EXAMPLE TO FRANKS CONJECTURE")
 
     if uc and len(me.intersection(mo))==0:
-        raise Exception("COUNTER EXAMPLE TO SANDER&GIJS CONJECTURE")
+        everything=True
+        print("COUNTER EXAMPLE TO SANDER&GIJS CONJECTURE")
+
+    if everything:
+        print("Family:")
+        printFamily(F)
+        print("Number of members:", k)
+        print("Ground Plane:",gp)
+        print("Ground Plane Size:",gpn)
+        print("Average Occurence:",averageOccurence(F))
+        print("Union Closed:", uc)
+        print("Intersection Closed:", ic)
+        print("Minimal Members:")
+        printFamily(mm)
+        print("Minimal Elements:", me)
+        print("Maximal Members:")
+        printFamily(maxm)
+        print("Maximal Elements:", maxe)
+        print("Most Occuring:", mo, mon)
+        print("Least Occuring:", lo, lon)
+        print("Has Common?:", hc)
+        print("Has Rare?:", hr)
+        print("Averaging Check : ", averagingCheck(F))
