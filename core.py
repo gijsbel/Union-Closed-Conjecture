@@ -1,27 +1,33 @@
 from itertools import chain, combinations
 from random import sample
+from operator import xor
 import math
 import warnings
 
 def familyFromList(L):
     return set(frozenset(i) for i in L)
 
-#
+# cardinality of the family
 def membersAmount(family):
     return len(family)
 
+# sum of the cardinality of the members
 def cumulativeMemberSize(family):
     s = 0
     for m in family:
         s += len(m)
     return s
 
+# calculates the average occurence of an element, does a smart
+# double counting argument
 def averageOccurence(family):
     gps = getGroundPlaneSize(family)
     if gps==0:
         return 0
     return cumulativeMemberSize(family)/gps
 
+# if the average is greater than half the cardinality of the family
+# their must exists an element that is common
 def averagingCheck(family):
     k = averageOccurence(family)
     k = math.ceil(k)
@@ -81,6 +87,27 @@ def makeIntersectionClosed(family):
         return c
     else:
         return makeIntersectionClosed(c)
+
+
+# checks if their is a member in the family that has only one of x and y 
+def seperated(family, x, y):
+    for m in family:
+        if xor(x in m, y in m):
+            return True
+    return False
+
+# checks if all elements are seperated
+def isSeperating(family, output=False):
+    U = getGroundPlane(family)
+    for x in U:
+        for y in U:
+            if x is y:
+                continue
+            if not seperated(family, x,y):
+                if output:
+                    print(str(x)+" and "+str(y)+" are not seperated")
+                return False
+    return True
 
 # finds how many members of the family contain a certain element
 def numberOfAppearances(family, element):
@@ -257,6 +284,7 @@ def inspectFamily(F, everything=False):
     lo, lon = leastOccuring(F)
     hc = mon >= k/2
     hr = lon <= k/2
+    s = isSeperating(F)
 
     if k<=1:
         if everything:
@@ -281,6 +309,7 @@ def inspectFamily(F, everything=False):
         print("Number of members:", k)
         print("Ground Plane:",gp)
         print("Ground Plane Size:",gpn)
+        print("Seperating:", s)
         print("Average Occurence:",averageOccurence(F))
         print("Union Closed:", uc)
         print("Intersection Closed:", ic)

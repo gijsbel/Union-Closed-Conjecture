@@ -26,8 +26,8 @@ print("Their are ",len(PU)," members in total")
 print("Their are ",len(PPU)," families in total")
 
 for f in PPU:
-    inspectFamily(f)
-
+    if isSeperating(f) and frozenset() in f and U in f and isUnionClosed(f) and isIntersectionClosed(f):
+        printFamily(f)
 
 # this family is a counter-example to the non-theorem that
 # The smallest(in cardinality) nonempty set contains
