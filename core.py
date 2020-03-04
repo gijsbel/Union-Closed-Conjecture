@@ -90,7 +90,7 @@ def makeIntersectionClosed(family):
 
 
 # checks if their is a member in the family that has only one of x and y 
-def seperated(family, x, y):
+def areSeperated(family, x, y):
     for m in family:
         if xor(x in m, y in m):
             return True
@@ -103,10 +103,30 @@ def isSeperating(family, output=False):
         for y in U:
             if x is y:
                 continue
-            if not seperated(family, x,y):
+            if not areSeperated(family, x,y):
                 if output:
                     print(str(x)+" and "+str(y)+" are not seperated")
                 return False
+    return True
+
+#
+def isMinimal(family, output=False):
+    U = getGroundPlane(family)
+    for x in U:
+        removeable = True
+        for m in family:
+            if x in m:
+                s = set(m)
+                s.discard(x)
+                if frozenset(s) in family:
+                    if output:
+                        print(str(x)+" is not removable because of "+str(s))
+                    removeable = False
+                    break
+        if removeable:
+            if output:
+                print(str(x)+" can be removed from the family")
+            return False
     return True
 
 # finds how many members of the family contain a certain element

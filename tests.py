@@ -25,9 +25,19 @@ PPU = powerset(PU)
 print("Their are ",len(PU)," members in total")
 print("Their are ",len(PPU)," families in total")
 
+c = 0
+m = 0
+s = 0
 for f in PPU:
-    if isSeperating(f) and frozenset() in f and U in f and isUnionClosed(f) and isIntersectionClosed(f):
-        printFamily(f)
+    if isUnionClosed(f) and isIntersectionClosed(f):
+        c += 1
+        if isMinimal(f):
+            m += 1
+        if isSeperating(f):
+            s += 1
+print(c, m, s)
+
+
 
 # this family is a counter-example to the non-theorem that
 # The smallest(in cardinality) nonempty set contains
