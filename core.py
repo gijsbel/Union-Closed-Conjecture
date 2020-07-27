@@ -120,7 +120,7 @@ def isMinimal(family, output=False):
                 s.discard(x)
                 if frozenset(s) in family:
                     if output:
-                        print(str(x)+" is not removable because of "+str(s))
+                        print(str(x)+" is not removable because "+str(m)+" and "+str(s)+" are in the family")
                     removeable = False
                     break
         if removeable:

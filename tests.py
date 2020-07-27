@@ -16,28 +16,35 @@ F = randomFamily(4,6)
 F = makeUnionClosed(F)
 """
 
-
-
+"""
 n = 4
 U = frozenset(range(1,n+1))
 PU = powerset(U)
 PPU = powerset(PU)
 print("Their are ",len(PU)," members in total")
 print("Their are ",len(PPU)," families in total")
-
-c = 0
-m = 0
-s = 0
+SF = 0
+MF = 0
+NUHCF = 0
+UCF = 0
 for f in PPU:
-    if isUnionClosed(f) and isIntersectionClosed(f):
-        c += 1
-        if isMinimal(f):
-            m += 1
-        if isSeperating(f):
-            s += 1
-print(c, m, s)
-
-
+    if isSeperating(f):
+        SF += 1
+        
+    if isMinimal(f):
+        MF += 1
+        
+    if isUnionClosed(f):
+        UCF += 1
+        
+    if (not isUnionClosed(f)) and hasCommon(f):
+        NUHCF += 1
+        
+print("Their are ",SF," seperating families in total")
+print("Their are ",MF," minimal families in total")
+print("Their are ",UCF," families that are union closed in total")
+print("Their are ",NUHCF," families that are not union closed but do have a common element, in total")
+"""
 
 # this family is a counter-example to the non-theorem that
 # The smallest(in cardinality) nonempty set contains
@@ -76,3 +83,15 @@ for i in range(10000):
     #f = makeUnionClosed(f)
     inspectFamily(f)
 """
+
+
+for n in range(1,5):
+    U = frozenset(range(1,n+1))
+    PU = powerset(U)
+    PPU = powerset(PU)
+    UCF = 0
+    for f in PPU:
+        if isUnionClosed(f):
+            UCF += 1
+    print(n, UCF)
+    
